@@ -15,7 +15,7 @@ function Trapez:novo(tipo,identificador,dono,solo,precoPorMetro,base1,base2,altu
    return tra
 end
 function Trapez:imprime()
-    print(self:preco())
+    print(self.tipo,self.identificador,self.dono,self.solo)
 end
 function Trapez:area()
     return ((self.base1+self.base2)*self.altura/2)

@@ -14,7 +14,7 @@ function Retang:novo(tipo,identificador,dono,solo,precoPorMetro,lado1,lado2)
    return Ret
 end
 function Retang:imprime()
-    print(self:preco())
+    print(self.tipo,self.identificador,self.dono,self.solo)
 end
 function Retang:area()
     return (self.lado1*self.lado2)

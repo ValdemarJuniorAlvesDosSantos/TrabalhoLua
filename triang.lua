@@ -14,7 +14,7 @@ function Triang:novo(tipo,identificador,dono,solo,precoPorMetro,base,altura)
    return tri
 end
 function Triang:imprime()
-    print(self:preco())
+    print(self.tipo,self.identificador,self.dono,self.solo)
 end
 function Triang:area()
     return (self.base*self.altura/2)
