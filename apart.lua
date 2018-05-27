@@ -1,6 +1,7 @@
 Apart={}
 Apart.__index = Apart
-
+--"classe" apartamento
+-- construtor da classe
 function Apart:novo(tipo,identificador,dono,nQuartos,nVagas,andar,area,precoPorMetro,lazer,nAndares)
    local Ap = {}
    setmetatable(Ap,Apart)
@@ -16,6 +17,7 @@ function Apart:novo(tipo,identificador,dono,nQuartos,nVagas,andar,area,precoPorM
    Ap.nAndares=nAndares
    return Ap
 end
+-- gera o preço do apartamento
 function Apart:preco()
   aux = self.area*self.precoPorMetro*(0.9+self.andar/self.nAndares)
       if (self.lazer=="S") then

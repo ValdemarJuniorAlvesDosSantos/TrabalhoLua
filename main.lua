@@ -1,13 +1,15 @@
+-- "import" dos arquivos necessarios
 Triang=require ("triang")
 Trapez=require ("trapez")
 Retang=require ("retang")
 Casa=require("casa")
 Apart=require("apart")
-imoveis={}
-imoveisCasa={}
-imoveisArg={}
+--variaveis
+imoveis={} --lista de todos os imoveis
+imoveisCasa={}--listadas casas que seguem os padroes
+imoveisArg={}--lista de terrenos argilosos
+espec={} --guarda os dados do espec.txt já em number
 
-espec={}
 --COMEÇO DAS FUNÇÔES
 --  Função de comparar o preço (questão a)
 function comp1(value1, value2)
@@ -94,7 +96,89 @@ function retira(iden)
       end
   end
 end
+--gera as listas que respondem as questoes a e b
+function geraListas()
+  local listaA={}
+  local listaB={}
+  local tamA= espec[1]*#imoveis/100 --pega a quantidade certa que deve se imprimir na lista A
+  local tamB= espec[2]*#imoveisArg/100 --pega a quantidade certa que deve se imprimir na lista B
+  local i=0
+  i=math.floor(tamA) --trunca para o tamanho ser um number natural
+  for j=1,i do
+    listaA[j]=imoveis[j+#imoveis-i]
+  end
+  i=math.floor(tamB) --trunca para o tamanho ser um number natural
+  for j=1,i do
+    listaB[j]=imoveisArg[#imoveisArg-i+j]
+  end
+  return listaA,listaB
+end
 
+function imprime()
+  local listaA={}
+  local listaB={}
+  listaA,listaB=geraListas()--formata a lista de imoveis e imoveisArg
+  --gera arquivo saida.txt
+  local saida=assert(io.open("saida.txt","w"),"nao pode criar o arquivo saida .txt")
+  local imprime= ""
+
+  --gera uma string (imprime) com os identificadores dos imoveis (questao a) ja no formato apropriado
+  if (#listaA>0) then
+     for v,k in pairs(listaA) do
+       if (v~=#listaA) then
+         imprime = (imprime..tostring(k.identificador)..", ")
+       end
+     end
+    imprime=(imprime..tostring(listaA[#listaA].identificador))
+  end
+  saida:write(imprime.."\n")
+
+  --gera uma string (imprime) com os identificadores dos terrenos argilosos(questao b) ja no formato apropriado
+  imprime= ""
+  if (#listaB>0) then
+     for v,k in pairs(listaB) do
+       if (v~=#listaB) then
+         imprime = (imprime..tostring(k.identificador)..", ")
+       end
+     end
+    imprime=(imprime..tostring(listaB[#listaB].identificador))
+  end
+  saida:write(imprime.."\n")
+
+  --gera uma string (imprime) com os identificadores das casas (questao c) ja no formato apropriado
+  imprime= ""
+  if (#imoveisCasa>0) then
+     for v,k in pairs(imoveisCasa) do
+       if (v ~= #imoveisCasa) then
+         imprime = (imprime..tostring(k.identificador)..", ")
+       end
+     end
+    imprime=(imprime..tostring(imoveisCasa[#imoveisCasa].identificador))
+  end
+  saida:write(imprime.."\n")
+  --final da impressão no arquivo saida .txt
+  io.close(saida)
+
+  -- gera o arquivo result.txt com a soma dos itens especificados no espec
+  local resu=assert(io.open("result.txt","w"),"nao pode criar o arquivo result.txt")
+  local result=0
+  --pega o item a ser somado da lista de imoveis caros
+  if (#listaA >= espec[5]and espec[5] ~= 0)then
+    result=result+listaA[espec[5]].identificador
+  end
+  --pega o item a ser somado da lista de imoveis argilosos
+  if (#listaB >= espec[6]and espec[6] ~= 0)then
+    result=result+listaB[espec[6]].identificador
+  end
+  --pega o item a ser somado da lista de Casas
+  if (#imoveisCasa >= espec[7] and espec[7] ~= 0)then
+    result=result+imoveisCasa[espec[7]].identificador
+  end
+
+  resu:write(tostring(result))
+  --final da impressao no arquivo result.txt
+  io.close(resu)
+end
 --FIM DAS FUNÇÔES
 
 -----------------------------------------
@@ -139,69 +223,9 @@ while (i<#linhas) do
     end
 end
 
---- EU PAREI AQUI----
-x=comp1
+-- Ordena as tabelas
 table.sort(imoveis,  comp1)
-x=function(value1,value2) return value1:area()>value2:area() end
 table.sort(imoveisArg,comp2)
-local listaA={}
-local listaB={}
-local tamA= espec[1]*#imoveis/100
-local tamB= espec[2]*#imoveisArg/100
-i=math.floor(tamA)
-for j=1,i do
-  listaA[j]=imoveis[j+#imoveis-i]
-end
-i=math.floor(tamB)
-for j=1,i do
-  listaB[j]=imoveisArg[#imoveisArg-i+j]
-end
-imprime= ""
-if (#listaA>0) then
-   for v,k in pairs(listaA) do
-     if (v~=#listaA) then
-       imprime = (imprime..tostring(k.identificador)..", ")
-     end
-   end
-  imprime=(imprime..tostring(listaA[#listaA].identificador))
-end
-saida=assert(io.open("saida.txt","w"),"nao pode criar o arquivo")
-saida:write(imprime.."\n")
-
-imprime= ""
-if (#listaB>0) then
-   for v,k in pairs(listaB) do
-     if (v~=#listaB) then
-       imprime = (imprime..tostring(k.identificador)..", ")
-     end
-   end
-  imprime=(imprime..tostring(listaB[#listaB].identificador))
-end
-saida:write(imprime.."\n")
-
-
 table.sort(imoveisCasa,comp3)
-imprime= ""
-if (#imoveisCasa>0) then
-   for v,k in pairs(imoveisCasa) do
-     if (v ~= #imoveisCasa) then
-       imprime = (imprime..tostring(k.identificador)..", ")
-     end
-   end
-  imprime=(imprime..tostring(imoveisCasa[#imoveisCasa].identificador))
-end
-saida:write(imprime.."\n")
-io.close(saida)
-result=0
-if (#listaA >= espec[5]and espec[5] ~= 0)then
-  result=result+listaA[espec[5]].identificador
-end
-if (#listaB >= espec[6]and espec[6] ~= 0)then
-  result=result+listaB[espec[6]].identificador
-end
-if (#imoveisCasa >= espec[7] and espec[7] ~= 0)then
-  result=result+imoveisCasa[espec[7]].identificador
-end
-resu=assert(io.open("result.txt","w"),"nao pode criar o arquivo")
-  resu:write(tostring(result))
-io.close(resu)
+--gera as listasA(questao a) e listaB(questao B) e imprime
+imprime()

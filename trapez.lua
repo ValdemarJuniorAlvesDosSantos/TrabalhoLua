@@ -1,10 +1,11 @@
 Trapez={}
 Trapez.__index = Trapez
-
+--"classe" Trapezio
+-- construtor da classe
 function Trapez:novo(tipo,identificador,dono,solo,precoPorMetro,base1,base2,altura)
-   local tra = {}             
+   local tra = {}
    setmetatable(tra,Trapez)
-   tra.tipo=tipo 
+   tra.tipo=tipo
    tra.identificador = identificador
    tra.dono=dono
    tra.solo=solo
@@ -14,21 +15,20 @@ function Trapez:novo(tipo,identificador,dono,solo,precoPorMetro,base1,base2,altu
    tra.altura=altura
    return tra
 end
-function Trapez:imprime()
-    print(self.tipo,self.identificador,self.dono,self.solo)
-end
+--função que calcula a area do trapézio
 function Trapez:area()
     return ((self.base1+self.base2)*self.altura/2)
 end
+--função que calcula o preco
 function Trapez:preco()
     aux = self.precoPorMetro*self:area()
-    if self.solo=="A" then 
+    if self.solo=="A" then
         return aux*0.9
     end
-    if self.solo=="G" then 
+    if self.solo=="G" then
         return aux*1.3
     end
     return aux*1.1
 end
-return Trapez 
- 
+
+return Trapez
